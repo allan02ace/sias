@@ -468,6 +468,32 @@
       link.addEventListener('click', closeAllDropdowns);
     });
 
+    // Mobile/touch devices have no :hover, so wire up tap-to-open for the
+    // top-level nav items (Transactions, Reports) that have dropdowns.
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+      var trigger = item.querySelector('a');
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        var wasActive = item.classList.contains('active');
+        closeAllDropdowns();
+        if (!wasActive) {
+          item.classList.add('active');
+          // closeAllDropdowns() just force-hid every dropdown via an inline
+          // style (kept briefly for hover cleanup); clear it on this one
+          // immediately so it actually shows up.
+          var dd = item.querySelector('.dropdown');
+          if (dd) { dd.style.display = ''; }
+        }
+      });
+    });
+
+    // Tapping anywhere outside an open dropdown closes it.
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-item')) {
+        closeAllDropdowns();
+      }
+    });
+
     function showEnrolledSubjects() {
       document.getElementById('enrolledSubjectsPage').classList.add('visible');
       renderPeriod(document.getElementById('periodInput').value.trim());
