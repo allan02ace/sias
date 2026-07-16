@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SIAS Online</title>
+
+<!-- Add to Home Screen (iOS Safari) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SIAS Online">
+<link rel="apple-touch-icon" href="icon-180.png">
+
+<!-- Generic web app manifest (Android/other browsers) -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4169e1">
 <style>
   * {
     margin: 0;
@@ -414,9 +426,28 @@
       renderPeriod(code);
     }
 
+    function closeAllDropdowns() {
+      document.querySelectorAll('.dropdown').forEach(function(dd) {
+        dd.style.display = 'none';
+        // release the inline override on next tick so :hover still works later
+        setTimeout(function() { dd.style.display = ''; }, 300);
+      });
+      document.querySelectorAll('.nav-item.active').forEach(function(ni) {
+        ni.classList.remove('active');
+      });
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
+    }
+
+    document.querySelectorAll('.dropdown-group a').forEach(function(link) {
+      link.addEventListener('click', closeAllDropdowns);
+    });
+
     function showEnrolledSubjects() {
       document.getElementById('enrolledSubjectsPage').classList.add('visible');
       renderPeriod(document.getElementById('periodInput').value.trim());
+      closeAllDropdowns();
     }
     function hideEnrolledSubjects() {
       document.getElementById('enrolledSubjectsPage').classList.remove('visible');

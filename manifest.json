@@ -1,0 +1,15 @@
+{
+  "name": "SIAS Online",
+  "short_name": "SIAS",
+  "start_url": "./sias_navbar.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4169e1",
+  "icons": [
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
