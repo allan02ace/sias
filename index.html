@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SIAS Online</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+  }
+  .navbar {
+    background-color: #4169e1;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 2px solid #26418f;
+    position: relative;
+  }
+  .nav-item {
+    position: relative;
+  }
+  .nav-item > a {
+    display: inline-block;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    margin-right: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  .nav-item > a:hover,
+  .nav-item.active > a {
+    background-color: #9b30d9;
+  }
+  .navbar > a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    margin-right: 20px;
+    padding: 8px 16px;
+  }
+  .navbar > a:hover {
+    background-color: #9b30d9;
+  }
+  .welcome {
+    color: #ffff00;
+    font-weight: bold;
+    font-size: 15px;
+    margin-right: auto;
+  }
+  .version {
+    color: #ffffff;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    min-width: 310px;
+    z-index: 10;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+  }
+  .nav-item:hover .dropdown,
+  .nav-item.active .dropdown {
+    display: block;
+  }
+  .dropdown-group {
+    padding: 6px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .dropdown-group:last-child {
+    border-bottom: none;
+  }
+  .dropdown-group a {
+    display: block;
+    padding: 8px 16px;
+    color: #333333;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .dropdown-group a:hover {
+    background-color: #f0f0f0;
+  }
+
+  /* ---- Page / tab area ---- */
+  .page-body {
+    display: none;
+  }
+  .page-body.visible {
+    display: block;
+  }
+  .tab-bar {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 16px 0 16px;
+  }
+  .tab {
+    font-weight: bold;
+    font-size: 16px;
+    color: #222222;
+    border-bottom: 3px solid #4169e1;
+    padding: 6px 4px 10px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab .close-x {
+    color: #999999;
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .content {
+    padding: 20px 24px;
+  }
+
+  .top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-row label {
+    width: 60px;
+    font-size: 15px;
+    color: #222222;
+    text-align: right;
+  }
+  .field-row input[type="text"] {
+    width: 110px;
+    border: none;
+    border-bottom: 1px solid #999999;
+    font-size: 15px;
+    padding: 2px 4px;
+    color: #333333;
+  }
+  .field-row input[type="text"]::placeholder {
+    color: #aaaaaa;
+  }
+  .help-btn {
+    background-color: #4169e1;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .field-note {
+    font-size: 15px;
+    color: #333333;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn {
+    border: none;
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 18px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-blue { background-color: #4169e1; }
+  .btn-green { background-color: #3fa64a; }
+  .inst-check {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: #333333;
+  }
+
+  .status-line {
+    margin: 16px 0 12px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1a3fbf;
+  }
+  .status-line .highlight {
+    color: #1a3fbf;
+    text-decoration: underline;
+  }
+
+  table.subjects {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 15px;
+  }
+  table.subjects th {
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 2px solid #333333;
+    font-size: 15px;
+  }
+  table.subjects td {
+    padding: 6px 10px;
+    color: #333333;
+  }
+
+  .total-line {
+    text-align: right;
+    margin-top: 24px;
+    font-size: 15px;
+    color: #333333;
+  }
+</style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="nav-item">
+      <a href="#">Transactions</a>
+      <div class="dropdown">
+        <div class="dropdown-group">
+          <a href="#">Change Password</a>
+          <a href="#">Multi-Factor Authentication</a>
+          <a href="#">Student Profile</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Pre-enlistment</a>
+          <a href="#">Enrollment</a>
+          <a href="#">Adding &amp; Dropping</a>
+          <a href="#">Amount Due</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Learning Modules</a>
+          <a href="#">My Online Tasks</a>
+          <a href="#">My Test Scores</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Teacher Evaluation</a>
+          <a href="#">Disable ID Card</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Dragon Payment</a>
+          <a href="#">Express Payment</a>
+          <a href="#">Failed Subjects Payment</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="#">Reports</a>
+      <div class="dropdown">
+        <div class="dropdown-group">
+          <a href="#">Class Offerings</a>
+          <a onclick="showEnrolledSubjects()">Enrolled Subjects</a>
+          <a href="#">Class Absences</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Term Grades (Match Curriculum)</a>
+          <a href="#">Final Grades (Match Curriculum)</a>
+          <a href="#">General Weighted Average (Match Curriculum)</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Term Grades (Ignore Curriculum)</a>
+          <a href="#">Final Grades (Ignore Curriculum)</a>
+          <a href="#">General Weighted Average (Ignore Curriculum)</a>
+        </div>
+        <div class="dropdown-group">
+          <a href="#">Curriculum Evaluation</a>
+          <a href="#">Student Ledger</a>
+          <a href="#">In/Out Monitoring</a>
+          <a href="#">eWallet Transactions</a>
+          <a href="#">Purchases Report</a>
+        </div>
+      </div>
+    </div>
+    <a href="#">Help</a>
+    <a href="#">Logout</a>
+    <span class="welcome">Welcome! Marquez, Allan Ace H.</span>
+    <span class="version">SIAS Online 3.7.7.12</span>
+  </div>
+
+  <div id="enrolledSubjectsPage" class="page-body">
+    <div class="tab-bar">
+      <div class="tab">Enrolled Subjects <span class="close-x" onclick="hideEnrolledSubjects()">&times;</span></div>
+    </div>
+
+    <div class="content">
+      <div class="top-row">
+        <div class="form-fields">
+          <div class="field-row">
+            <label>Student</label>
+            <input type="text" placeholder="19101300">
+            <button class="help-btn">?</button>
+            <span class="field-note">Marquez, Allan Ace H.</span>
+          </div>
+          <div class="field-row">
+            <label>Period</label>
+            <input type="text" id="periodInput" value="26-1" onkeydown="if(event.key==='Enter'){refreshPeriod();}">
+            <button class="help-btn">?</button>
+            <span class="field-note" id="periodDesc">1st Semester 2026-2027</span>
+          </div>
+          <div class="field-row">
+            <label>To</label>
+            <input type="text">
+            <button class="help-btn">?</button>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-blue" onclick="refreshPeriod()">Refresh</button>
+          <button class="btn btn-blue">PDF</button>
+          <span class="inst-check"><input type="checkbox"> Inst</span>
+          <button class="btn btn-green">Purpose</button>
+          <button class="btn btn-green">COE</button>
+        </div>
+      </div>
+
+      <div class="status-line">Student is <span class="highlight">OFFICIALLY Enrolled</span>.</div>
+
+      <table class="subjects">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Subject Code</th>
+            <th>Subject Description</th>
+            <th>Units</th>
+            <th>Schedule</th>
+            <th>Room</th>
+            <th>Instructor</th>
+            <th>Section</th>
+          </tr>
+        </thead>
+        <tbody id="subjectsBody">
+        </tbody>
+      </table>
+
+      <div class="total-line">Total: <strong id="totalCount">5</strong></div>
+    </div>
+  </div>
+
+  <script>
+    var periodData = {
+      "26-1": {
+        desc: "1st Semester 2026-2027",
+        rows: [
+          ["A132","AEC 28","Business Taxation","3.0","10-11 am MWF","MB302","Veljune C....","CABA-4"],
+          ["A135","PRE 16","Comprehensive Assessm...","3.0","3-4 pm MWF","MB301","Jimmy I. P...","CABA-4"],
+          ["A136","PRE 18","Comprehensive Assessm...","6.0","4-6 pm MWF","MB303","Jimmy I. P...","CABA-4"],
+          ["A134","PRE 14-A","Comprehensive Assessm...","6.0","1-4 pm TTh","MB301","Veljune C....","CABA-4"],
+          ["A133","PREE 12","Principles and Methods o...","3.0","4-5:30 pm TTh","MB302","Saranay I....","CABA-4"]
+        ]
+      },
+      "25-2": {
+        desc: "2nd Semester 2025-2026",
+        rows: [
+          ["A82","BME 2-A","Strategic Management","3.0","1-2 pm MWF","NB206...","Denia H. ...","CABA-F"],
+          ["A91","AEC 24","Strategic Business Analysis","3.0","2-3 pm MWF","NB203...","Prime Joh...","CABA-F"],
+          ["A88","AEC 18","Accounting Information S...","3.0","8:30-10 am TTh","135CABA","Franckline...","CABA-F"],
+          ["A89","AEC 20","Regulatory Framework a...","3.0","11:30 am-1 pm TTh","135CABA","Veljune C....","CABA-F"],
+          ["A94","PRE 8","Auditing Assurance Conc...","3.0","1-2:30 pm TTh","135CABA","Jimmy I. P...","CABA-F"],
+          ["A93","PRE 6","Accounting for Business ...","6.0","2:30-5:30 pm TTh","135CABA","Prime Joh...","CABA-F"],
+          ["A92","PRE 4","Auditing in CIS Environmet","3.0","5:30-7 pm TTh","135CABA","Franckline...","CABA-F"],
+          ["A90","AEC 22","Accounting Research Met...","3.0","1-4 pm S","131","Clemente ...","CABA-F"]
+        ]
+      }
+    };
+
+    function renderPeriod(code) {
+      var data = periodData[code];
+      var tbody = document.getElementById('subjectsBody');
+      tbody.innerHTML = '';
+      if (!data) {
+        document.getElementById('periodDesc').textContent = 'No record found';
+        document.getElementById('totalCount').textContent = '0';
+        return;
+      }
+      document.getElementById('periodDesc').textContent = data.desc;
+      data.rows.forEach(function(row) {
+        var tr = document.createElement('tr');
+        row.forEach(function(cell) {
+          var td = document.createElement('td');
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      document.getElementById('totalCount').textContent = data.rows.length;
+    }
+
+    function refreshPeriod() {
+      var code = document.getElementById('periodInput').value.trim();
+      renderPeriod(code);
+    }
+
+    function showEnrolledSubjects() {
+      document.getElementById('enrolledSubjectsPage').classList.add('visible');
+      renderPeriod(document.getElementById('periodInput').value.trim());
+    }
+    function hideEnrolledSubjects() {
+      document.getElementById('enrolledSubjectsPage').classList.remove('visible');
+    }
+  </script>
+
+</body>
+</html>
