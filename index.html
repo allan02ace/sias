@@ -2,380 +2,360 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SIAS Online</title>
-
-<!-- Add to Home Screen (iOS Safari) -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SIAS Online">
-<link rel="apple-touch-icon" href="icon-180.png">
-
-<!-- Generic web app manifest (Android/other browsers) -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4169e1">
 <style>
-  * {
+  * { box-sizing: border-box; }
+  body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  html, body {
     font-family: Arial, Helvetica, sans-serif;
     background: #ffffff;
-    /* Non-responsive, fixed-width legacy layout: on narrow/mobile screens
-     * the page is intentionally wider than the viewport and scrolls
-     * horizontally, rather than reflowing/wrapping content. */
-    min-width: 1000px;
-    overflow-x: auto;
   }
-  .navbar {
-    background-color: #4169e1;
+  .topbar {
+    background: #4b6de3;
+    color: #fff;
+    height: 40px;
     display: flex;
     align-items: center;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    padding: 8px 16px;
-    border-bottom: 2px solid #26418f;
-    position: relative;
-  }
-  .nav-item {
-    position: relative;
-    flex-shrink: 0;
-  }
-  .nav-item > a {
-    display: inline-block;
-    color: #ffffff;
-    text-decoration: none;
+    justify-content: space-between;
+    padding: 0 16px;
     font-size: 15px;
-    margin-right: 8px;
-    padding: 8px 8px;
+  }
+  .topbar .left-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .topbar a {
+    color: #fff;
+    text-decoration: none;
     cursor: pointer;
-    white-space: nowrap;
   }
-  .nav-item > a:hover,
-  .nav-item.active > a {
-    background-color: #9b30d9;
-  }
-  .navbar > a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 15px;
-    margin-right: 8px;
-    padding: 8px 8px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .navbar > a:hover {
-    background-color: #9b30d9;
-  }
+  .topbar a:hover { text-decoration: underline; }
   .welcome {
-    color: #ffff00;
+    color: #fff400;
     font-weight: bold;
-    font-size: 15px;
-    margin-right: auto;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
-  .version {
-    color: #ffffff;
-    font-size: 14px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .dropdown {
+  .page {
     display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #ffffff;
-    border: 1px solid #ccc;
-    min-width: 310px;
-    z-index: 10;
-    box-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+    padding-top: 60px;
   }
-  .nav-item:hover .dropdown,
-  .nav-item.active .dropdown {
+  .page.active { display: block; }
+  .center-box {
+    width: 320px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
     display: block;
+    margin: 0 auto 12px auto;
   }
-  .dropdown-group {
-    padding: 6px 0;
-    border-bottom: 1px solid #ccc;
+  .school-name {
+    font-weight: bold;
+    font-size: 22px;
+    color: #111;
+    margin: 0;
   }
-  .dropdown-group:last-child {
-    border-bottom: none;
+  .school-loc {
+    font-weight: bold;
+    font-size: 16px;
+    color: #111;
+    margin: 2px 0 20px 0;
   }
-  .dropdown-group a {
+  .pill-btn {
     display: block;
-    padding: 8px 16px;
-    color: #333333;
-    text-decoration: none;
-    font-size: 15px;
+    width: 100%;
+    padding: 14px 0;
+    margin-bottom: 14px;
+    border: none;
+    border-radius: 24px;
+    background: #4b6de3;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
   }
-  .dropdown-group a:hover {
-    background-color: #f0f0f0;
+  .pill-btn:hover { background: #3d59c4; }
+  .pill-btn.login {
+    background: #4aa8f0;
   }
-
-  /* ---- Page / tab area ---- */
-  .page-body {
+  .pill-btn.login:hover { background: #3a93da; }
+  .pill-btn.forgot {
+    background: #f5a623;
+  }
+  .pill-btn.forgot:hover { background: #dd951e; }
+  .pill-btn.active-tab {
+    background: #4b6de3;
+  }
+  .field {
+    position: relative;
+    margin-bottom: 22px;
+  }
+  .field input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #7b3fe4;
+    padding: 8px 28px 8px 4px;
+    font-size: 16px;
+    outline: none;
+    color: #333;
+  }
+  .field input::placeholder { color: #999; }
+  .eye {
+    position: absolute;
+    right: 2px;
+    top: 6px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 18px;
+  }
+  .reports-menu {
+    position: absolute;
+    top: 40px;
+    left: 68px;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    width: 260px;
     display: none;
+    z-index: 10;
+    padding: 6px 0;
   }
-  .page-body.visible {
+  .reports-menu.show { display: block; }
+  .reports-menu a {
     display: block;
+    padding: 8px 16px;
+    color: #222;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .reports-menu a:hover { background: #f0f2fb; }
+  .menu-divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 4px 0;
+  }
+  .reports-tab {
+    position: relative;
+    background: #7b5ee0;
   }
   .tab-bar {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 16px 0 16px;
+    border-bottom: 2px solid #4b6de3;
+    padding: 10px 16px 8px 16px;
   }
-  .tab {
+  .tab-label {
     font-weight: bold;
     font-size: 16px;
-    color: #222222;
-    border-bottom: 3px solid #4169e1;
-    padding: 6px 4px 10px 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #111;
   }
-  .tab .close-x {
-    color: #999999;
-    font-weight: normal;
-    font-size: 14px;
+  .tab-close {
+    margin-left: 6px;
+    color: #888;
     cursor: pointer;
+    font-size: 14px;
   }
-
-  .content {
-    padding: 20px 24px;
+  .report-panel {
+    border: 1px solid #ccc;
+    border-top: none;
+    margin: 0 12px;
+    padding: 16px 20px;
   }
-
-  .top-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 16px;
-  }
-
-  .form-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .field-row {
+  .report-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    white-space: nowrap;
+    margin-bottom: 10px;
   }
-  .field-row label {
-    width: 60px;
+  .report-row label {
+    width: 55px;
     font-size: 15px;
-    color: #222222;
-    text-align: right;
-    flex-shrink: 0;
+    color: #333;
   }
-  .field-row input[type="text"] {
-    width: 110px;
+  .report-row input[type=text] {
     border: none;
-    border-bottom: 1px solid #999999;
-    font-size: 15px;
-    padding: 2px 4px;
-    color: #333333;
+    border-bottom: 1px solid #999;
+    padding: 4px 2px;
+    font-size: 14px;
+    outline: none;
+    color: #555;
   }
-  .field-row input[type="text"]::placeholder {
-    color: #aaaaaa;
-  }
-  .help-btn {
-    background-color: #4169e1;
-    color: #ffffff;
-    border: none;
-    border-radius: 50%;
+  .qbtn {
     width: 26px;
     height: 26px;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .field-note {
-    font-size: 15px;
-    color: #333333;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .action-buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-  .btn {
+    border-radius: 50%;
+    background: #4b6de3;
+    color: #fff;
     border: none;
-    color: #ffffff;
-    padding: 8px 18px;
-    border-radius: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .info-text {
+    color: #333;
+    font-size: 14px;
+  }
+  .actions-row {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .action-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 9px 16px;
+    color: #fff;
+    font-weight: bold;
     font-size: 14px;
     cursor: pointer;
   }
-  .btn-blue { background-color: #4169e1; }
-  .btn-green { background-color: #3fa64a; }
-  .inst-check {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    color: #333333;
-  }
-
+  .action-btn.blue { background: #4b6de3; }
+  .action-btn.green { background: #4caf50; }
   .status-line {
-    margin: 16px 0 12px 0;
-    font-size: 16px;
+    color: #2b3fd0;
     font-weight: bold;
-    color: #1a3fbf;
+    margin: 14px 0 10px 0;
   }
-  .status-line .highlight {
-    color: #1a3fbf;
-    text-decoration: underline;
-  }
-
-  table.subjects {
+  table.report-table {
     border-collapse: collapse;
     width: 100%;
-    min-width: 900px;
-    font-size: 15px;
   }
-  table.subjects th {
+  table.report-table th {
     text-align: left;
     padding: 6px 10px;
-    border-bottom: 2px solid #333333;
     font-size: 15px;
-    white-space: nowrap;
+    border-bottom: 2px solid #333;
   }
-  table.subjects td {
+  table.report-table td {
     padding: 6px 10px;
-    color: #333333;
-    white-space: nowrap;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    color: #222;
   }
-
   .total-line {
     text-align: right;
-    margin-top: 24px;
+    margin-top: 10px;
     font-size: 15px;
-    color: #333333;
+    color: #222;
   }
 </style>
 </head>
 <body>
 
-  <div class="navbar">
-    <div class="nav-item">
-      <a href="#">Transactions</a>
-      <div class="dropdown">
-        <div class="dropdown-group">
-          <a href="#">Change Password</a>
-          <a href="#">Multi-Factor Authentication</a>
-          <a href="#">Student Profile</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Pre-enlistment</a>
-          <a href="#">Enrollment</a>
-          <a href="#">Adding &amp; Dropping</a>
-          <a href="#">Amount Due</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Learning Modules</a>
-          <a href="#">My Online Tasks</a>
-          <a href="#">My Test Scores</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Teacher Evaluation</a>
-          <a href="#">Disable ID Card</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Dragon Payment</a>
-          <a href="#">Express Payment</a>
-          <a href="#">Failed Subjects Payment</a>
+<!-- PAGE 1: Role selection -->
+<div id="page-landing" class="page active">
+  <div class="topbar">
+    <div></div>
+    <div>SIAS Online 3.7.7.13</div>
+  </div>
+  <div class="center-box" style="margin-top:40px;">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Blank.png/100px-Blank.png" onerror="this.style.display='none'">
+    <p class="school-name">Northeastern College</p>
+    <p class="school-loc">Santiago City, Isabela</p>
+    <button class="pill-btn" disabled style="opacity:0.6;cursor:not-allowed;">Administrator</button>
+    <button class="pill-btn" disabled style="opacity:0.6;cursor:not-allowed;">Instructor</button>
+    <button class="pill-btn" onclick="showPage('page-login')">Student</button>
+    <button class="pill-btn" disabled style="opacity:0.6;cursor:not-allowed;">Parent</button>
+    <button class="pill-btn" disabled style="opacity:0.6;cursor:not-allowed;">Apply for Admission</button>
+  </div>
+</div>
+
+<!-- PAGE 2: Student login -->
+<div id="page-login" class="page">
+  <div class="topbar">
+    <div></div>
+    <div>SIAS Online 3.7.7.13</div>
+  </div>
+  <div class="center-box" style="margin-top:30px;">
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Blank.png/100px-Blank.png" onerror="this.style.display='none'">
+    <p class="school-name">Northeastern College</p>
+    <p class="school-loc">Santiago City, Isabela</p>
+    <button class="pill-btn active-tab" style="cursor:default;">Student</button>
+    <div class="field">
+      <input type="text" id="userId" placeholder="User ID">
+      <span class="eye">🚫👁</span>
+    </div>
+    <div class="field">
+      <input type="password" id="password" placeholder="Password">
+      <span class="eye">🚫👁</span>
+    </div>
+    <button class="pill-btn login" onclick="doLogin()">Login</button>
+    <button class="pill-btn forgot">Forgot Password</button>
+  </div>
+</div>
+
+<!-- PAGE 3: Dashboard -->
+<div id="page-dashboard" class="page">
+  <div class="topbar">
+    <div class="left-links">
+      <a onclick="closeReports()">Transactions</a>
+      <div class="reports-tab">
+        <a onclick="toggleReports(event)">Reports</a>
+        <div id="reportsMenu" class="reports-menu">
+          <a>Class Offerings</a>
+          <a onclick="openReport('enrolled-subjects')">Enrolled Subjects</a>
+          <a>Class Absences</a>
+          <hr class="menu-divider">
+          <a>Term Grades (Match Curriculum)</a>
+          <a>Final Grades (Match Curriculum)</a>
+          <a>General Weighted Average (Match Curriculum)</a>
+          <hr class="menu-divider">
+          <a>Term Grades (Ignore Curriculum)</a>
+          <a>Final Grades (Ignore Curriculum)</a>
+          <a>General Weighted Average (Ignore Curriculum)</a>
+          <hr class="menu-divider">
+          <a>Curriculum Evaluation</a>
+          <a>Student Ledger</a>
+          <a>In/Out Monitoring</a>
+          <a>eWallet Transactions</a>
+          <a>Purchases Report</a>
         </div>
       </div>
+      <a onclick="closeReports()">Help</a>
+      <a onclick="showPage('page-landing'); closeReports();">Logout</a>
+      <span class="welcome" id="welcomeName">Welcome! Marquez, Allan Ace H.</span>
     </div>
-    <div class="nav-item">
-      <a href="#">Reports</a>
-      <div class="dropdown">
-        <div class="dropdown-group">
-          <a href="#">Class Offerings</a>
-          <a onclick="showEnrolledSubjects()">Enrolled Subjects</a>
-          <a href="#">Class Absences</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Term Grades (Match Curriculum)</a>
-          <a href="#">Final Grades (Match Curriculum)</a>
-          <a href="#">General Weighted Average (Match Curriculum)</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Term Grades (Ignore Curriculum)</a>
-          <a href="#">Final Grades (Ignore Curriculum)</a>
-          <a href="#">General Weighted Average (Ignore Curriculum)</a>
-        </div>
-        <div class="dropdown-group">
-          <a href="#">Curriculum Evaluation</a>
-          <a href="#">Student Ledger</a>
-          <a href="#">In/Out Monitoring</a>
-          <a href="#">eWallet Transactions</a>
-          <a href="#">Purchases Report</a>
-        </div>
-      </div>
-    </div>
-    <a href="#">Help</a>
-    <a href="#">Logout</a>
-    <span class="welcome">Welcome! Marquez, Allan Ace H.</span>
-    <span class="version">SIAS Online 3.7.7.12</span>
+    <div>SIAS Online 3.7.7.13</div>
   </div>
 
-  <div id="enrolledSubjectsPage" class="page-body">
+  <!-- Enrolled Subjects report panel -->
+  <div id="report-enrolled-subjects" class="report-content" style="display:none;">
     <div class="tab-bar">
-      <div class="tab">Enrolled Subjects <span class="close-x" onclick="hideEnrolledSubjects()">&times;</span></div>
+      <span class="tab-label">Enrolled Subjects</span>
+      <span class="tab-close" onclick="closeReport('enrolled-subjects')">&times;</span>
     </div>
-
-    <div class="content">
-      <div class="top-row">
-        <div class="form-fields">
-          <div class="field-row">
-            <label>Student</label>
-            <input type="text" placeholder="19101300">
-            <button class="help-btn">?</button>
-            <span class="field-note">Marquez, Allan Ace H.</span>
-          </div>
-          <div class="field-row">
-            <label>Period</label>
-            <input type="text" id="periodInput" value="26-1" onkeydown="if(event.key==='Enter'){refreshPeriod();}">
-            <button class="help-btn">?</button>
-            <span class="field-note" id="periodDesc">1st Semester 2026-2027</span>
-          </div>
-          <div class="field-row">
-            <label>To</label>
-            <input type="text">
-            <button class="help-btn">?</button>
-          </div>
-        </div>
-
-        <div class="action-buttons">
-          <button class="btn btn-blue" onclick="refreshPeriod()">Refresh</button>
-          <button class="btn btn-blue">PDF</button>
-          <span class="inst-check"><input type="checkbox"> Inst</span>
-          <button class="btn btn-green">Purpose</button>
-          <button class="btn btn-green">COE</button>
+    <div class="report-panel">
+      <div class="report-row">
+        <label>Student</label>
+        <input type="text" value="19101300" style="width:90px;" readonly>
+        <button class="qbtn">?</button>
+        <span class="info-text">Marquez, Allan Ace H.</span>
+        <div class="actions-row">
+          <button class="action-btn blue" onclick="location.reload()">Refresh</button>
+          <button class="action-btn blue">PDF</button>
+          <label style="display:flex;align-items:center;gap:4px;font-size:14px;color:#333;">
+            <input type="checkbox" style="width:auto;"> Inst
+          </label>
+          <button class="action-btn green">Purpose</button>
+          <button class="action-btn green">COE</button>
         </div>
       </div>
-
-      <div class="status-line">Student is <span class="highlight">OFFICIALLY Enrolled</span>.</div>
-
-      <table class="subjects">
+      <div class="report-row">
+        <label>Period</label>
+        <input type="text" value="26-1" style="width:60px;">
+        <button class="qbtn">?</button>
+        <span class="info-text">1st Semester 2026-2027</span>
+      </div>
+      <div class="report-row">
+        <label>To</label>
+        <input type="text" style="width:90px;">
+        <button class="qbtn">?</button>
+      </div>
+      <div class="status-line">Student is OFFICIALLY Enrolled.</div>
+      <table class="report-table">
         <thead>
           <tr>
             <th>Class</th>
@@ -388,121 +368,47 @@
             <th>Section</th>
           </tr>
         </thead>
-        <tbody id="subjectsBody">
+        <tbody>
+          <tr><td>A132</td><td>AEC 28</td><td>Business Taxation</td><td>3.0</td><td>10-11 am MWF</td><td>MB302</td><td>Veljune C....</td><td>CABA-4</td></tr>
+          <tr><td>A135</td><td>PRE 16</td><td>Comprehensive Assessm...</td><td>3.0</td><td>3-4 pm MWF</td><td>MB301</td><td>Jimmy I. P...</td><td>CABA-4</td></tr>
+          <tr><td>A136</td><td>PRE 18</td><td>Comprehensive Assessm...</td><td>6.0</td><td>4-6 pm MWF</td><td>MB303</td><td>Jimmy I. P...</td><td>CABA-4</td></tr>
+          <tr><td>A134</td><td>PRE 14-A</td><td>Comprehensive Assessm...</td><td>6.0</td><td>1-4 pm TTh</td><td>MB301</td><td>Veljune C....</td><td>CABA-4</td></tr>
+          <tr><td>A133</td><td>PREE 12</td><td>Principles and Methods o...</td><td>3.0</td><td>4-5:30 pm TTh</td><td>MB302</td><td>Saranay I....</td><td>CABA-4</td></tr>
         </tbody>
       </table>
-
-      <div class="total-line">Total: <strong id="totalCount">5</strong></div>
+      <div class="total-line">Total: <strong>5</strong></div>
     </div>
   </div>
+</div>
 
-  <script>
-    var periodData = {
-      "26-1": {
-        desc: "1st Semester 2026-2027",
-        rows: [
-          ["A132","AEC 28","Business Taxation","3.0","10-11 am MWF","MB302","Veljune C....","CABA-4"],
-          ["A135","PRE 16","Comprehensive Assessm...","3.0","3-4 pm MWF","MB301","Jimmy I. P...","CABA-4"],
-          ["A136","PRE 18","Comprehensive Assessm...","6.0","4-6 pm MWF","MB303","Jimmy I. P...","CABA-4"],
-          ["A134","PRE 14-A","Comprehensive Assessm...","6.0","1-4 pm TTh","MB301","Veljune C....","CABA-4"],
-          ["A133","PREE 12","Principles and Methods o...","3.0","4-5:30 pm TTh","MB302","Saranay I....","CABA-4"]
-        ]
-      },
-      "25-2": {
-        desc: "2nd Semester 2025-2026",
-        rows: [
-          ["A82","BME 2-A","Strategic Management","3.0","1-2 pm MWF","NB206...","Denia H. ...","CABA-F"],
-          ["A91","AEC 24","Strategic Business Analysis","3.0","2-3 pm MWF","NB203...","Prime Joh...","CABA-F"],
-          ["A88","AEC 18","Accounting Information S...","3.0","8:30-10 am TTh","135CABA","Franckline...","CABA-F"],
-          ["A89","AEC 20","Regulatory Framework a...","3.0","11:30 am-1 pm TTh","135CABA","Veljune C....","CABA-F"],
-          ["A94","PRE 8","Auditing Assurance Conc...","3.0","1-2:30 pm TTh","135CABA","Jimmy I. P...","CABA-F"],
-          ["A93","PRE 6","Accounting for Business ...","6.0","2:30-5:30 pm TTh","135CABA","Prime Joh...","CABA-F"],
-          ["A92","PRE 4","Auditing in CIS Environmet","3.0","5:30-7 pm TTh","135CABA","Franckline...","CABA-F"],
-          ["A90","AEC 22","Accounting Research Met...","3.0","1-4 pm S","131","Clemente ...","CABA-F"]
-        ]
-      }
-    };
+<script>
+function openReport(name) {
+  document.querySelectorAll('.report-content').forEach(r => r.style.display = 'none');
+  document.getElementById('report-' + name).style.display = 'block';
+  closeReports();
+}
+function closeReport(name) {
+  document.getElementById('report-' + name).style.display = 'none';
+}
+</script>
 
-    function renderPeriod(code) {
-      var data = periodData[code];
-      var tbody = document.getElementById('subjectsBody');
-      tbody.innerHTML = '';
-      if (!data) {
-        document.getElementById('periodDesc').textContent = 'No record found';
-        document.getElementById('totalCount').textContent = '0';
-        return;
-      }
-      document.getElementById('periodDesc').textContent = data.desc;
-      data.rows.forEach(function(row) {
-        var tr = document.createElement('tr');
-        row.forEach(function(cell) {
-          var td = document.createElement('td');
-          td.textContent = cell;
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      document.getElementById('totalCount').textContent = data.rows.length;
-    }
-
-    function refreshPeriod() {
-      var code = document.getElementById('periodInput').value.trim();
-      renderPeriod(code);
-    }
-
-    function closeAllDropdowns() {
-      document.querySelectorAll('.dropdown').forEach(function(dd) {
-        dd.style.display = 'none';
-        // release the inline override on next tick so :hover still works later
-        setTimeout(function() { dd.style.display = ''; }, 300);
-      });
-      document.querySelectorAll('.nav-item.active').forEach(function(ni) {
-        ni.classList.remove('active');
-      });
-      if (document.activeElement) {
-        document.activeElement.blur();
-      }
-    }
-
-    document.querySelectorAll('.dropdown-group a').forEach(function(link) {
-      link.addEventListener('click', closeAllDropdowns);
-    });
-
-    // Mobile/touch devices have no :hover, so wire up tap-to-open for the
-    // top-level nav items (Transactions, Reports) that have dropdowns.
-    document.querySelectorAll('.nav-item').forEach(function(item) {
-      var trigger = item.querySelector('a');
-      trigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        var wasActive = item.classList.contains('active');
-        closeAllDropdowns();
-        if (!wasActive) {
-          item.classList.add('active');
-          // closeAllDropdowns() just force-hid every dropdown via an inline
-          // style (kept briefly for hover cleanup); clear it on this one
-          // immediately so it actually shows up.
-          var dd = item.querySelector('.dropdown');
-          if (dd) { dd.style.display = ''; }
-        }
-      });
-    });
-
-    // Tapping anywhere outside an open dropdown closes it.
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.nav-item')) {
-        closeAllDropdowns();
-      }
-    });
-
-    function showEnrolledSubjects() {
-      document.getElementById('enrolledSubjectsPage').classList.add('visible');
-      renderPeriod(document.getElementById('periodInput').value.trim());
-      closeAllDropdowns();
-    }
-    function hideEnrolledSubjects() {
-      document.getElementById('enrolledSubjectsPage').classList.remove('visible');
-    }
-  </script>
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function doLogin() {
+  showPage('page-dashboard');
+}
+function toggleReports(e) {
+  e.stopPropagation();
+  document.getElementById('reportsMenu').classList.toggle('show');
+}
+function closeReports() {
+  document.getElementById('reportsMenu').classList.remove('show');
+}
+document.addEventListener('click', closeReports);
+</script>
 
 </body>
 </html>
